@@ -3,6 +3,7 @@ import { CirclePlus, HomeIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
+import HabitRow from "@/components/HabitRow";
 
 export default function Home() {
   // PART A: HABIT PART
@@ -255,109 +256,27 @@ export default function Home() {
                       const completed = isCompletedForPeriod(habit);
 
                       return (
-                        <tr
+                        <HabitRow
                           key={habit._id}
-                          className={`
-        ${completed ? "opacity-50 line-through bg-green-50" : ""}
-        ${selectedIds.has(habit._id) ? "bg-red-100/50" : ""}
-      `}
-                        >
-                          {deleteMode && (
-                            <td className="px-4 py-2">
-                              <input
-                                type="checkbox"
-                                checked={selectedIds.has(habit._id)}
-                                onChange={() => {
-                                  setSelectedIds((prev) => {
-                                    const next = new Set(prev);
-                                    next.has(habit._id)
-                                      ? next.delete(habit._id)
-                                      : next.add(habit._id);
-                                    return next;
-                                  });
-                                }}
-                              />
-                            </td>
-                          )}
-
-                          {/* Task Name */}
-                          <td className="px-4 py-2 font-medium">
-                            {editingId === habit._id ? (
-                              <input
-                                className="border px-2 py-1 w-full"
-                                value={tempName}
-                                autoFocus
-                                onChange={(e) => setTempName(e.target.value)}
-                                onBlur={() => {
-                                  updateHabit(habit._id, { name: tempName });
-                                  setEditingId(null);
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    updateHabit(habit._id, { name: tempName });
-                                    setEditingId(null);
-                                  }
-                                }}
-                              />
-                            ) : (
-                              <span
-                                className="flex items-center gap-2 cursor-pointer hover:shadow-md p-2"
-                                onClick={() => {
-                                  setEditingId(habit._id);
-                                  setTempName(habit.name);
-                                }}
-                              >
-                                {completed && <span className="text-green-600">✓</span>}
-                                {habit.name}
-                              </span>
-                            )}
-                          </td>
-
-                          {/* Count */}
-                          <td className="px-4 py-2">
-                            <div className="flex items-center gap-2">
-                              <span>{habit.count}</span>
-                              <button
-                                disabled={completed}
-                                className={`
-    ${completed ? "cursor-not-allowed text-gray-400" : "hover:text-green-600"}
-  `}
-                                onClick={() =>
-                                  updateHabit(habit._id, {
-                                    count: habit.count + 1,
-                                    lastCompletedAt: new Date().toISOString(),
-                                  })
-                                }
-                              >
-                                <CirclePlus className="w-5 h-5" />
-                              </button>
-                            </div>
-                          </td>
-
-                          {/* Type */}
-                          <td className="px-4 py-2">
-                            <select
-                              className="border px-2 py-1"
-                              value={habit.type}
-                              onChange={(e) =>
-                                updateHabit(habit._id, {
-                                  type: e.target.value as Habit["type"],
-                                })
-                              }
-                            >
-                              <option value="Daily">Daily</option>
-                              <option value="Weekly">Weekly</option>
-                              <option value="Monthly">Monthly</option>
-                            </select>
-                          </td>
-
-                          {/* Created */}
-                          <td className="px-4 py-2 text-sm text-gray-600">
-                            {new Date(habit.createdAt).toLocaleDateString(
-                              "en-GB"
-                            )}
-                          </td>
-                        </tr>
+                          habit={habit}
+                          completed={completed}
+                          deleteMode={deleteMode}
+                          selected={selectedIds.has(habit._id)}
+                          editingId={editingId}
+                          tempName={tempName}
+                          setTempName={setTempName}
+                          setEditingId={setEditingId}
+                          onToggleSelect={() =>
+                            setSelectedIds((prev) => {
+                              const next = new Set(prev);
+                              next.has(habit._id)
+                                ? next.delete(habit._id)
+                                : next.add(habit._id);
+                              return next;
+                            })
+                          }
+                          onUpdate={updateHabit}
+                        />
                       );
                     })
                 )}

@@ -1,8 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Modal({
   addHabit,
@@ -11,114 +10,125 @@ export default function Modal({
   addHabit: (habit: any) => void;
   changeModalStatus: () => void;
 }) {
+  const [dropdown, setDropDown] = useState(false);
+  const [name, setName] = useState("");
+  const [count, setCount] = useState("");
+  const [type, setType] = useState("Daily");
+
   const handleAddHabit = async () => {
-    if (!name || !count || !type) return alert("Fill all fields!");
-    // addHabit({name, count: Number(count), type})
+    if (!name || !count || !type) {
+      alert("Fill all fields!");
+      return;
+    }
+
     try {
       const result = await fetch("/api/habits/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, count: Number(count), type }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          count: Number(count),
+          type,
+        }),
       });
 
       const data = await result.json();
 
       if (result.ok) {
-        alert("Habit added successfully!");
         addHabit(data.habit);
+        changeModalStatus();
       } else {
-        console.error("Error: ", data.message);
-        alert("Something went wrong");
+        alert(data.message || "Something went wrong");
       }
     } catch (error) {
-      console.error("Error: ", error);
-      alert("Error adding habits");
+      console.error(error);
+      alert("Error adding habit");
     }
   };
 
-  const [dropdown, setDropDown] = useState(false);
-  const [name, setName] = useState("");
-  const [count, setCount] = useState("0");
-  const [type, setType] = useState("Daily"); // default value
-
   return (
-    <div className="flex fixed justify-center items-center bg-black/50 z-50 shadow-lg inset-0">
-      <div className="bg-green-300 p-6 w-full max-w-md flex flex-col border-2 rounded-lg shadow-lg gap-2">
-        <input
-          required
-          type="name"
-          placeholder="Enter task name here"
-          name="taskName"
-          className="border p-2"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        ></input>
-        <input
-          required
-          type="number"
-          placeholder="Enter count here"
-          name="count"
-          min={0}
-          className="border p-2"
-          value={count}
-          onChange={(e) => {
-            setCount(e.target.value);
-          }}
-        ></input>
-        <button
-          className="rounded border p-2 text-white bg-green-400 hover:bg-green-500 max-w-fit flex justify-center items-center"
-          onClick={() => setDropDown(!dropdown)}
-        >
-          Type <ChevronDown className="w-5 h-5" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-xl bg-amber-100 shadow-xl border">
 
-        {dropdown && (
-          <div className="flex flex-col">
-            <button
-              className="px-2 text-black bg-white hover:bg-white/80 max-w-fit"
-              onClick={() => {
-                setType("Daily");
-                setDropDown(false);
-              }}
-            >
-              Daily
-            </button>
-            <button
-              className="px-2 text-black bg-white hover:bg-white/80 max-w-fit"
-              onClick={() => {
-                setType("Weekly");
-                setDropDown(false);
-              }}
-            >
-              Weekly
-            </button>
-            <button
-              className="px-2 text-black bg-white hover:bg-white/80 max-w-fit"
-              onClick={() => {
-                setType("Monthly");
-                setDropDown(false);
-              }}
-            >
-              Monthly
-            </button>
+        {/* Header */}
+        <div className="border-b px-6 py-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Add New Habit
+          </h2>
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-col gap-4 px-6 py-5">
+
+          {/* Name */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm text-gray-600">Habit name</label>
+            <input
+              type="text"
+              placeholder="Enter habit name"
+              className="rounded-md border px-3 py-2 focus:outline-none focus:ring-1 focus:ring-black"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
-        )}
-        <div className="flex flex-row justify-between">
+
+          {/* Count */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm text-gray-600">Current count</label>
+            <input
+              type="number"
+              min={0}
+              placeholder="Enter current count"
+              className="rounded-md border px-3 py-2 focus:outline-none focus:ring-1 focus:ring-black"
+              value={count}
+              onChange={(e) => setCount(e.target.value)}
+            />
+          </div>
+
+          {/* Type Dropdown */}
+          <div className="relative">
+            <label className="text-sm text-gray-600">Habit type</label>
+
+            <button
+              onClick={() => setDropDown((prev) => !prev)}
+              className="mt-1 flex w-full items-center justify-between rounded-md border px-3 py-2 hover:bg-gray-50"
+            >
+              <span>{type}</span>
+              <ChevronDown className="h-4 w-4 text-gray-500" />
+            </button>
+
+            {dropdown && (
+              <div className="absolute mt-1 w-full rounded-md border bg-white shadow-md">
+                {["Daily", "Weekly", "Monthly"].map((option) => (
+                  <button
+                    key={option}
+                    className="w-full px-3 py-2 text-left hover:bg-green-100"
+                    onClick={() => {
+                      setType(option);
+                      setDropDown(false);
+                    }}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3 border-t px-6 py-4">
           <button
-            className="p-2 px-5 text-white bg-green-400"
-            onClick={handleAddHabit}
-          >
-            Add Habit
-          </button>
-          <button
-            className="p-2 text-white bg-green-400"
+            className="bg-amber-100 px-4 py-2 text-sm text-black hover:cursor-pointer border border-black hover:bg-white"
             onClick={changeModalStatus}
           >
             Exit
+          </button>
+          <button
+            className="bg-amber-100 px-4 py-2 text-sm text-black hover:cursor-pointer border border-black hover:bg-white"
+            onClick={handleAddHabit}
+          >
+            Add
           </button>
         </div>
       </div>
