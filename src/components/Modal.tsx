@@ -49,18 +49,13 @@ export default function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-xl bg-amber-100 shadow-xl border">
-
-        {/* Header */}
         <div className="border-b px-6 py-4">
           <h2 className="text-lg font-semibold text-gray-800">
             Add New Habit
           </h2>
         </div>
 
-        {/* Body */}
         <div className="flex flex-col gap-4 px-6 py-5">
-
-          {/* Name */}
           <div className="flex flex-col gap-1">
             <label className="text-sm text-gray-600">Habit name</label>
             <input
@@ -72,7 +67,6 @@ export default function Modal({
             />
           </div>
 
-          {/* Count */}
           <div className="flex flex-col gap-1">
             <label className="text-sm text-gray-600">Current count</label>
             <input
@@ -85,7 +79,6 @@ export default function Modal({
             />
           </div>
 
-          {/* Type Dropdown */}
           <div className="relative">
             <label className="text-sm text-gray-600">Habit type</label>
 
@@ -116,7 +109,6 @@ export default function Modal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex justify-end gap-3 border-t px-6 py-4">
           <button
             className="bg-amber-100 px-4 py-2 text-sm text-black hover:cursor-pointer border border-black hover:bg-white"

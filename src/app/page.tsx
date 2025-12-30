@@ -151,11 +151,11 @@ export default function Home() {
         <div className="shadow-md text-lg bg-white flex justify-center items-center min-h-screen">
           <div className="checkboxes bg-amber-100 min-w-md shadow-lg p-3 border rounded">
             <div className="heading flex min-w-full justify-between items-center">
-              <h2 className="font-bold text-2xl p-2">{formatted}</h2> {/*date*/}
+              <h2 className="font-bold text-2xl p-2">{formatted}</h2> 
               <button
                 className="bg-transparent border px-3 m-3 font-semibold hover:cursor-pointer"
                 onClick={() => {
-                  setIsModalOpen(!isModalOpen); // modal
+                  setIsModalOpen(!isModalOpen); 
                 }}
               >
                 {" "}
@@ -164,13 +164,11 @@ export default function Home() {
               <button
                 className="bg-transparent border px-3 m-3 font-semibold hover:bg-red-100"
                 onClick={async () => {
-                  // Enter delete mode first
                   if (!deleteMode) {
                     setDeleteMode(true);
                     return;
                   }
 
-                  // If already in delete mode, perform deletion
                   if (selectedIds.size === 0) {
                     alert("Select at least one habit to delete.");
                     return;
@@ -188,7 +186,6 @@ export default function Home() {
                     prev.filter((habit) => !selectedIds.has(habit._id))
                   );
 
-                  // Reset state
                   setSelectedIds(new Set());
                   setDeleteMode(false);
                 }}

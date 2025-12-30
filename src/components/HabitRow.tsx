@@ -48,7 +48,6 @@ export default function HabitRow({
         </td>
       )}
 
-      {/* Name */}
       <td className="px-4 py-2 font-medium">
         {editingId === habit._id ? (
           <input
@@ -81,7 +80,6 @@ export default function HabitRow({
         )}
       </td>
 
-      {/* Count */}
       <td className="px-4 py-2">
         <div className="flex items-center gap-2">
           <span>{habit.count}</span>
@@ -104,7 +102,6 @@ export default function HabitRow({
         </div>
       </td>
 
-      {/* Type */}
       <td className="px-4 py-2">
         <select
           className="border px-2 py-1"
@@ -121,7 +118,6 @@ export default function HabitRow({
         </select>
       </td>
 
-      {/* Created */}
       <td className="px-4 py-2 text-sm text-gray-600">
         {new Date(habit.createdAt).toLocaleDateString("en-GB")}
       </td>
