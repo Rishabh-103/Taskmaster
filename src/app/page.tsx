@@ -42,7 +42,7 @@ export default function Home() {
     fetchHabits();
   }, []);
 
-  const addHabit = (habit: any) => {
+  const addHabit = (habit: Habit) => {
     setHabitDict((prev) => [...prev, habit]);
     setIsModalOpen(false);
   };

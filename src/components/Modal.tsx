@@ -3,13 +3,23 @@
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 
+type Habit = {
+  _id: string;
+  name: string;
+  type: "Daily" | "Weekly" | "Monthly";
+  count: number;
+  createdAt: string;
+  lastCompletedAt: string | null;
+};
+
 export default function Modal({
   addHabit,
   changeModalStatus,
 }: {
-  addHabit: (habit: any) => void;
+  addHabit: (habit: Habit) => void;
   changeModalStatus: () => void;
 }) {
+  
   const [dropdown, setDropDown] = useState(false);
   const [name, setName] = useState("");
   const [count, setCount] = useState("");
