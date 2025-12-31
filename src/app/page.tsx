@@ -30,7 +30,13 @@ export default function Home() {
         if (!res.ok) throw new Error("Failed to fetch habits");
 
         const data = await res.json();
-        setHabitDict(data);
+
+        if (Array.isArray(data)) {
+          setHabitDict(data);
+        } else {
+          console.error("API did not return array:", data);
+          setHabitDict([]);
+        }
       } catch (err) {
         console.error(err);
         setHabitDict([]);
@@ -114,48 +120,17 @@ export default function Home() {
         >
           <HomeIcon />
         </Link>
-        <Link
-          href="/"
-          className="px-3 py-2 mx-1 hover:bg-black/10 hover:rounded-lg"
-        >
-          About
-        </Link>
-        <Link
-          href="/"
-          className="px-3 py-2 mx-1 hover:bg-black/10 hover:rounded-lg"
-        >
-          Help
-        </Link>
-        <Link
-          href="/"
-          className="px-3 py-2 mx-1 hover:bg-black/10 hover:rounded-lg"
-        >
-          Contact
-        </Link>
-
-        <Link
-          href="/"
-          className="ml-auto px-3 py-2 mx-1 hover:bg-black/10 hover:rounded-lg"
-        >
-          Login
-        </Link>
-        <Link
-          href="/"
-          className="px-3 py-2 mx-1 hover:bg-black/10 hover:rounded-lg"
-        >
-          Signup
-        </Link>
       </nav>
       <hr></hr>
       <main>
         <div className="shadow-md text-lg bg-white flex justify-center items-center min-h-screen">
           <div className="checkboxes bg-amber-100 min-w-md shadow-lg p-3 border rounded">
             <div className="heading flex min-w-full justify-between items-center">
-              <h2 className="font-bold text-2xl p-2">{formatted}</h2> 
+              <h2 className="font-bold text-2xl p-2">{formatted}</h2>
               <button
                 className="bg-transparent border px-3 m-3 font-semibold hover:cursor-pointer"
                 onClick={() => {
-                  setIsModalOpen(!isModalOpen); 
+                  setIsModalOpen(!isModalOpen);
                 }}
               >
                 {" "}
