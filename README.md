@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TASKMASTER
+#### Video Demo: https://www.youtube.com/watch?v=8FWKxPP71g8
+#### Description: 
+Taskmaster is a habit counter that tracks habits of the user, with their counts. Each habit has several properties associated with it, being the name of the habit, the count of the habit, the date on which the habit was created (for logging purposes), and the date on which the habit was last completed on (which will come into play later).
 
-## Getting Started
+The user is able to create habits by entering the name, the current count and the type of the habit using a modal which prompts them of this information. All the habits are displayed on the main dashboard of the web application, thus allowing the user to read their habits and keep up with them. All the properties of a habit, except creation date, can be modified or updated after its creation (name, count, type). Habits can also be deleted many-at-a-time as per the user's discretion. Thus, the CRUD (create, read, update, delete) operation has been implemented for the habits.
 
-First, run the development server:
+The name of the habit is self-explanatory. The count of the habit is initialized with some value, and is then incremented by the user as and when required. There are three types of habits in this application: Daily, Weekly and Monthly habits. Depending on the type of the habit, the habit recurs in that time period. A habit is considered completed or executed when the count of it has been incremented. Once a habit has been completed, it is set to recur again.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The web application is made primarily with the NextJS framework of the JavaScript. It is a full-stack application that comprises of a frontend and a backend with a MongoDB database (free cluster). It was initialized with the NextJS boilerplate. The main files for this project are route.ts, mongodb.ts, page.tsx, HabitRow.tsx and Modal.tsx. As is evident by the file extension names, these are written in TypeScript. The web application is made with modern UI/UX paradigms, being smooth on the eyes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The route.ts file has implementation for the GET, POST, PATCH and DELETE call functions or API calls which allow for the communication between the frontend and the database. These API routes allow for the CRUD operation as defined above to be functioning properly using NextJS's NextRequests and NextResponse abstractions.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The mongodb.ts file has the logic for connecting the client to the MongoDB Atlas database (free cluster), the URL for which is given in the .env.local file. It uses a shared client promise to ensure that multiple database connections are not opened during development, which is important when using hot reloading in NextJS.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The Modal.tsx file has the implementation and user interface for the modal which allows the user to add habits using a POST method. It collects the user input for habit name, initial count and habit type, performs basic validations and then sends this data to the backend API.
 
-## Learn More
+The HabitRow.tsx file defines the structure and properties of a custom datatype created for this project, "Habit". It also renders the component which will be used time and time again in the page.tsx file to render each individual row in the habit list of the user. Furthermore, it handles the inline editing of the habit names, incrementing of the habit counters, changing of the habit type, and distinguishes completed habits. Inline editing was chosen over separate edit forms to reduce complications with more modals and keep the interface minimal. The application was made with more focus on the clarity and ease of use, allowing for most interactions being accessible through direct clicks rather than nested menus.
 
-To learn more about Next.js, take a look at the following resources:
+The page.tsx file defines the main page and the dashboard for this project. It contains most of the state variables (used in NextJS and React), useEffect definitions, and several arrow functions that allow the application functionalities to work properly. It also contains the logic for determining recurrence of the habits as per their type (Daily, Monthly, Weekly). It renders the Navbar component, the main design layout, button and the overall user interface for the main dashboard of the web application. The Node Package Manager (npm) and NodeJS was used in the creation and management of this project and its modules. Some icons in the web application have been imported from the Lucide-React library.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There was some contention when trying to decide when a particular habit is considered to be completed for its time period. At first, I thought of marking a habit as completed with a tick-mark checkbox or toggle in front of each habit, but that didn't look very good. Thus, a design choice was made to keep the completion of a habit associated with the habit count itself. This also made the application consistent with its core identity as a "habit counter" rather than a simple checklist. When a habit’s count is incremented, the application records the timestamp of this action and determines whether the habit has already been completed for its current recurrence period. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Keeping completion tied with the counter also allowed for cleaner logic when dealing with the recurrence logic of the Daily, Weekly and Monthly habits. By comparison with the last completed timestamps with the current date, the application can determine whether a habit should appear as a completed habit or an active habit, without requiring explicit user interaction. Completed habits are tucked away at the end of the list so that focus is shed more on the active habits.
